@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-manager-backend
+  labels:
+    app: task-manager-backend
+
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+
+  selector:
+    matchLabels:
+      app: task-manager-backend
+
+  template:
+    metadata:
+      labels:
+        app: task-manager-backend
+
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+
+          ports:
+            - name: http
+              containerPort: {{ .Values.backend.service.port }}
+
+          env:
+            - name: DB_HOST
+              value: task-manager-postgres
+
+            - name: DB_PORT
+              value: "5432"
+
+            - name: DB_NAME
+              value: taskdb
+
+            - name: DB_USERNAME
+              value: postgres
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: task-manager-postgres-secret
+                  key: POSTGRES_PASSWORD
+
+          resources:
+{{ toYaml .Values.backend.resources | indent 12 }}
