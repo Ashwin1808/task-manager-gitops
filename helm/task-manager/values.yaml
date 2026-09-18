@@ -1,5 +1,5 @@
 backend:
-  replicaCount: 5
+  replicaCount: 1
   image:
     repository: ghcr.io/ashwin1808/task-manager-backend
     tag: dev
