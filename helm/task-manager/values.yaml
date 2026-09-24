@@ -1,3 +1,7 @@
+
+imagePullSecrets:
+  - name: ghcr-secret
+
 backend:
   replicaCount: 2
   image:
