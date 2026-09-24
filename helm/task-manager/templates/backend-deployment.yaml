@@ -12,6 +12,12 @@ spec:
     matchLabels:
       app: task-manager-backend
 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
   template:
     metadata:
       labels:
@@ -48,6 +54,24 @@ spec:
                 secretKeyRef:
                   name: task-manager-postgres-secret
                   key: POSTGRES_PASSWORD
+
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
 
           resources:
 {{ toYaml .Values.backend.resources | indent 12 }}
