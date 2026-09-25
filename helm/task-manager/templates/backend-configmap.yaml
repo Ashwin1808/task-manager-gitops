@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: task-manager-backend-config
+
+data:
+  DB_HOST: task-manager-postgres
+  DB_PORT: "5432"
+  DB_NAME: taskdb

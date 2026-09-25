@@ -36,15 +36,25 @@ spec:
             - name: http
               containerPort: {{ .Values.backend.service.port }}
 
+
           env:
             - name: DB_HOST
-              value: task-manager-postgres
+              valueFrom:
+                configMapKeyRef:
+                  name: task-manager-backend-config
+                  key: DB_HOST
 
             - name: DB_PORT
-              value: "5432"
+              valueFrom:
+                configMapKeyRef:
+                  name: task-manager-backend-config
+                  key: DB_PORT
 
             - name: DB_NAME
-              value: taskdb
+              valueFrom:
+                configMapKeyRef:
+                  name: task-manager-backend-config
+                  key: DB_NAME
 
             - name: DB_USERNAME
               value: postgres
